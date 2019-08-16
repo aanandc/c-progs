@@ -1,0 +1,61 @@
+
+
+#include <stdio.h>
+
+
+  char   days_arr[7][10]={
+	       "sunday",
+	       "monday",
+	       "tuesday",
+	       "wednesday",
+	       "thursday",
+	       "friday",
+	       "saturday"
+  };
+
+// 0 is sunday
+char* translate_day(int day){
+  return days_arr[day];
+}
+
+/*
+return integers representing 
+0 - sunday 
+1 - monday
+and so on..
+6  - friday
+
+ */
+int  calculate_day(int year,int month,int day){
+  //lets do for 2019 first
+  //doomsday for 2019 is 5 - thursday
+  int doomsday = 5;
+  int ref_day = 0;
+  int diff = 0;
+  int ans = 0;
+  if(8 == month){
+    ref_day =  8;
+  }
+  else if(6 == month){
+    ref_day = 6;
+  }
+  if(day > ref_day){
+    diff = (day - ref_day)%7;
+    ans = (        + diff)%7;
+  }
+  else{
+    diff =  (ref_day - day)%7;
+    ans = (ref_day  - diff)%7;
+  }
+
+  printf("diff is %d",diff);
+  return ans;
+  
+}
+
+int main(){
+  int day = calculate_day(2019,8,10);
+  printf("\nday is %s\n " , translate_day(day));
+  return 0;
+
+}
