@@ -1,8 +1,17 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdarg.h>
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
 
-#define DEBUG true
+#define DEBUG
 
+#ifdef DEBUG
+#define LOG(x) printf(x)
+#else
+#define LOG(x)
+#endif
   char   days_arr[7][10]={
 	       "sunday",
 	       "monday",
@@ -12,6 +21,9 @@
 	       "friday",
 	       "saturday"
   };
+
+
+	 
 
 // 0 is sunday
 char* translate_day(int day){
@@ -128,11 +140,26 @@ int main(int argc,char **argv){
   int year = 2019;
   int month = 12;
   int date = 1;
+  time_t seconds;
+
+
   //printf("%s",argv[1]);
   /*for(int i=1980;i<2030;i++){
   int yeartest = doomsDayOfYear(i);
   printf("year %d , doomsday : %s\n",i,translate_day(yeartest));
   }*/
+  if(1 == argc){
+    //no  arguments
+    //generate  random  year,month,date  and  query the user
+    seconds = time(NULL);
+    srand(seconds);
+    LOG("one argument case\n");
+    year = 2019;
+    month = 1 + (rand() % 12);
+    date = 1 + (rand() % 27);
+    printf("random date is %d:%d:%d\n",year,month,date); 
+    
+  }
 
   int day = calculate_day(year,month,date);
   printf("%d:%d:%d %s\n " , date , month, year, translate_day(day));
