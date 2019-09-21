@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define DEBUG
+//#define DEBUG
 
 #ifdef DEBUG
 #define LOG(x) printf(x)
@@ -179,12 +179,14 @@ char** splitString(char*  input,char delim){
 
 
 int main(int argc,char **argv){
+  int GAME=1;
+  int format = -1;
   int year = 2019;
   int month = 12;
   int date = 1;
   time_t seconds;
   int userguess = -1;
-
+ do_it_again:
   //printf("%s",argv[1]);
   /*for(int i=1980;i<2030;i++){
   int yeartest = doomsDayOfYear(i);
@@ -193,16 +195,17 @@ int main(int argc,char **argv){
   if(1 == argc){
     //no  arguments
     //generate  random  year,month,date  and  query the user
+    format = GAME;
     seconds = time(NULL);
     srand(seconds);
     LOG("no argument case\n");
     year = 2019;
     month = 1 + (rand() % 12);
     date = 1 + (rand() % 27);
-    printf("random date is %d:%d:%d\n",year,month,date); 
-    printf("what is the day ? \n Input 0 - sunday  \n 1 - monday");
+    printf("\nrandom date is %d:%d:%d\n",year,month,date); 
+    printf("what is the day ? \n0 - sunday  \n1 - monday");
     printf("\n2 - tuesday \n3  - wednesday \n4 - thursday");
-    printf("\n5 - friday \n 6 - saturday");
+    printf("\n5 - friday \n6 - saturday\n");
 
     while(1){//loop till the user enters valid input ;-)
     scanf("%d",&userguess);
@@ -232,8 +235,30 @@ int main(int argc,char **argv){
   }
 
   int day = calculate_day(year,month,date);
+  if(userguess == -1){
+    //2 argument case dont do anything
+  }
+  else if(userguess == day){
+    printf("\ncorrect\n");
+  }
+  else {
+    printf("\nwrong\n");
+  }
 
-  printf("%d:%d:%d %s\n " , date , month, year, translate_day(day));
+  printf("%d:%d:%d is a  %s\n " , date , month, year, translate_day(day));
+  
+  if(format == GAME){
+    char again='n';
+    printf("Do you want to play again (y/n) ? ");
+    scanf(" %c",&again);//sometimes C is pain. Without the space in front of %c , scanf for characters will not work due to leading whitespace
+    if (again == 'y' || again =='Y'){
+      goto do_it_again;
+    }
+    else{
+      //do nothing 
+    }
+  }
+
 
   return 0;
 
