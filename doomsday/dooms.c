@@ -89,7 +89,7 @@ int  calculate_day(int year,int month,int day){
   int ref_day = 0;
   int diff = 0;
   int ans = 0;
-  if( ( 6 ==  month ) || ( 8 ==  month) || ( 10 == month ) || (12 == month))  {
+  if( (4 == month) || ( 6 ==  month ) || ( 8 ==  month) || ( 10 == month ) || (12 == month))  {
   ref_day = month; // doomsdays are 6-6,8-8,10-10,12-12
   }
   else if(month == 3){
@@ -136,12 +136,54 @@ if(day > ref_day){
   
 }
 
+char** splitString(char*  input,char delim);
+
+
+char** splitString(char*  input,char delim){
+  char *c = input;
+  int length =   strlen(input) + 1;
+  char  **output = NULL;
+  char **t = NULL;
+  output = malloc(length);//we cannot have more no. of substring than the length of the string
+  t = output;
+  char *val = NULL;
+  while(*c != '\0'){
+    val = malloc(length);
+    *t =  val;
+    while(*c !=  delim && *c != '\0'){
+      *val = *c;
+      val++;
+      c++;
+     }
+    *val = '\0';
+    if(*c == '\0'){
+      //we have reached the end of the string,stop the traversal
+      t++;
+      break;
+    }
+    c++;//move next char from the delimitor
+    t++;
+  }
+  *t = NULL; //just a marker for us
+  
+  //print the splitted strings for testing
+  t = output;
+  while(*t != NULL){
+    //printf("split string is %s\n",*t);
+    t++;
+  }
+  return output;
+}
+
+
+
+
 int main(int argc,char **argv){
   int year = 2019;
   int month = 12;
   int date = 1;
   time_t seconds;
-
+  int userguess = -1;
 
   //printf("%s",argv[1]);
   /*for(int i=1980;i<2030;i++){
@@ -153,15 +195,44 @@ int main(int argc,char **argv){
     //generate  random  year,month,date  and  query the user
     seconds = time(NULL);
     srand(seconds);
-    LOG("one argument case\n");
+    LOG("no argument case\n");
     year = 2019;
     month = 1 + (rand() % 12);
     date = 1 + (rand() % 27);
     printf("random date is %d:%d:%d\n",year,month,date); 
+    printf("what is the day ? \n Input 0 - sunday  \n 1 - monday");
+    printf("\n2 - tuesday \n3  - wednesday \n4 - thursday");
+    printf("\n5 - friday \n 6 - saturday");
+
+    while(1){//loop till the user enters valid input ;-)
+    scanf("%d",&userguess);
+    if(userguess >= 0 &&  userguess <=6){
+      break; 
+    }
+    else{
+      printf("\ninvalid input - please enter a value between 0(sunday) and 6(saturday)");
+    }
+    }
     
+  }
+  else if(2 == argc){
+    //calculate the day for the date  provided by the user
+    //date has to be provided in the format yyyy:mm:dd
+    //char** splitted = split(argv
+    char** temp = argv;
+    *temp++;
+    char delim = ':';
+    char** ans = splitString(*temp,delim);
+    //assume that the user has  given  rh right input in the format yyyy:mm:dd
+    year  = atoi(*ans);
+    ans++;
+    month = atoi(*ans);
+    ans++;
+    date = atoi(*ans);
   }
 
   int day = calculate_day(year,month,date);
+
   printf("%d:%d:%d %s\n " , date , month, year, translate_day(day));
 
   return 0;
